@@ -1,0 +1,19 @@
+version: "1.0"
+
+authorized_owners:
+  - "astroicers"
+
+github_token_env: "OPERATOR_GITHUB_TOKEN"
+
+defaults:
+  label_filter: ["ready-for-agent"]
+  priority_map:
+    P0: ["critical", "urgent"]
+    P1: ["high"]
+    P2: ["medium"]
+    P3: ["low"]
+  sla_hours_map:
+    P0: 0
+    P1: 24
+    P2: 72
+    P3: 168

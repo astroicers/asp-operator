@@ -1,0 +1,33 @@
+project: asp-operator
+version: "1.0"
+
+tasks:
+  - id: TASK-001
+    title: "config_loader: 讀取 operator-config.yaml"
+    type: NEW_FEATURE
+    priority: high
+    status: completed
+
+  - id: TASK-002
+    title: "task_translator: GitHub Issue → ASP inbox task"
+    type: NEW_FEATURE
+    priority: high
+    status: completed
+
+  - id: TASK-003
+    title: "inbox_writer: GitHub API commit .asp-task-inbox.json"
+    type: NEW_FEATURE
+    priority: high
+    status: completed
+
+  - id: TASK-004
+    title: "poll_issues: 整合三模組 + GitHub Actions workflow"
+    type: NEW_FEATURE
+    priority: high
+    status: pending
+
+  - id: TASK-005
+    title: "驗收: workflow_dispatch 測試 + AI-SOP-Protocol opt-in"
+    type: NEW_FEATURE
+    priority: high
+    status: pending

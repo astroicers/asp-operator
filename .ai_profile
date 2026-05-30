@@ -1,0 +1,8 @@
+project: asp-operator
+type: system
+level: L1
+language: python
+
+operator:
+  enabled: true
+  label_filter: ["ready-for-agent"]

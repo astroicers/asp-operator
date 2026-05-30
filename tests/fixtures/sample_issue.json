@@ -1,0 +1,9 @@
+{
+  "number": 42,
+  "title": "Login page crashes on mobile",
+  "body": "Steps to reproduce:\n1. Open on iPhone\n2. Tap Login\n3. App crashes\n\nExpected: Login works",
+  "html_url": "https://github.com/astroicers/AI-SOP-Protocol/issues/42",
+  "labels": [{"name": "bug"}, {"name": "high"}],
+  "state": "open",
+  "created_at": "2026-05-30T08:00:00Z"
+}
