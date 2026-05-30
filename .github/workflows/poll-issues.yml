@@ -24,8 +24,11 @@ jobs:
 
       - name: Run tests
         run: python -m pytest tests/ -v
+        env:
+          PYTHONPATH: ${{ github.workspace }}
 
       - name: Poll GitHub Issues
-        run: python src/poll_issues.py
+        run: python -m src.poll_issues
         env:
           OPERATOR_GITHUB_TOKEN: ${{ secrets.OPERATOR_GITHUB_TOKEN }}
+          PYTHONPATH: ${{ github.workspace }}
