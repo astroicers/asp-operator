@@ -113,8 +113,7 @@ def test_poll_repo_no_matching_issues_does_not_write():
     issue = _make_issue(1, "Unlabelled", ["bug"])  # no ready-for-agent
     repo = _make_repo(issues=[issue])
 
-    with patch("src.poll_issues.write_inbox") as mock_write, \
-         patch("src.poll_issues.translate_issue") as mock_translate:
+    with patch("src.poll_issues.write_inbox") as mock_write:
         poll_repo(repo, ".asp-task-inbox.json", LABEL_FILTER, PRIORITY_MAP, SLA_MAP)
         mock_write.assert_not_called()
 

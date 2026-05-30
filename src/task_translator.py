@@ -3,7 +3,7 @@ from typing import Any, Dict, List
 
 
 def classify_type(issue: Dict) -> str:
-    label_names = [l["name"].lower() for l in issue.get("labels", [])]
+    label_names = [l["name"].lower() for l in (issue.get("labels") or [])]
     title = (issue.get("title") or "").lower()
 
     if "bug" in label_names or any(kw in title for kw in ["fix", "bug", "crash", "error", "broken"]):
@@ -32,12 +32,12 @@ def translate_issue(
     sla_hours_map: Dict[str, int],
 ) -> Dict[str, Any]:
     number = issue["number"]
-    label_names = [l["name"] for l in issue.get("labels", [])]
+    label_names = [l["name"] for l in (issue.get("labels") or [])]
     priority = map_priority(label_names, priority_map)
     body = issue.get("body") or ""
 
     return {
-        "id": f"INBOX-{number:03d}",
+        "id": f"INBOX-{number}",
         "title": issue["title"],
         "type": classify_type(issue),
         "priority": priority,

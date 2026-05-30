@@ -14,7 +14,7 @@ EXISTING_TASKS = [
 ]
 
 NEW_TASK = {
-    "id": "INBOX-042",
+    "id": "INBOX-42",
     "title": "New crash",
     "status": "pending",
     "source": {"ref": "https://github.com/org/repo/issues/42", "type": "github_issue"},
@@ -84,7 +84,7 @@ def test_write_inbox_creates_file_when_not_exists():
     repo.create_file.assert_called_once()
     args, kwargs = repo.create_file.call_args
     written = json.loads(kwargs["content"])
-    assert written[0]["id"] == "INBOX-042"
+    assert written[0]["id"] == "INBOX-42"
 
 
 def test_write_inbox_updates_file_when_exists():
@@ -109,4 +109,4 @@ def test_write_inbox_commit_message_format():
     repo = _make_mock_repo(existing_content=None)
     write_inbox(repo, ".asp-task-inbox.json", [NEW_TASK])
     _, kwargs = repo.create_file.call_args
-    assert "asp-operator" in kwargs["message"].lower() or "inbox" in kwargs["message"].lower()
+    assert kwargs["message"] == "chore(inbox): create asp-task-inbox via asp-operator"

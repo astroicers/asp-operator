@@ -38,7 +38,7 @@ def load_config(path: str) -> Config:
         data = yaml.safe_load(f)
 
     owners = data.get("authorized_owners")
-    if not owners:
+    if not isinstance(owners, list) or not owners:
         raise ConfigError("authorized_owners must be a non-empty list")
 
     defaults_data = data.get("defaults", {})

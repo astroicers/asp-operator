@@ -62,6 +62,13 @@ def test_load_config_empty_authorized_owners_raises(tmp_path):
         load_config(path)
 
 
+def test_load_config_authorized_owners_string_raises(tmp_path):
+    bad = {**MINIMAL_CONFIG, "authorized_owners": "astroicers"}
+    path = write_config(tmp_path, bad)
+    with pytest.raises(ConfigError, match="authorized_owners"):
+        load_config(path)
+
+
 def test_get_token_from_env(tmp_path, monkeypatch):
     path = write_config(tmp_path, MINIMAL_CONFIG)
     monkeypatch.setenv("OPERATOR_GITHUB_TOKEN", "ghp_test123")

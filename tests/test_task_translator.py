@@ -46,6 +46,11 @@ def test_classify_type_default_general():
     assert classify_type(issue) == "GENERAL"
 
 
+def test_classify_type_labels_none():
+    issue = {"labels": None, "title": "fix crash", "body": ""}
+    assert classify_type(issue) == "BUGFIX"
+
+
 # ── map_priority ──────────────────────────────────────────────────────────────
 
 def test_map_priority_high_label():
@@ -82,7 +87,7 @@ def test_map_sla_unknown_defaults_168():
 def test_translate_issue_id_format():
     issue = load_issue()
     task = translate_issue(issue, default_priority_map(), default_sla_map())
-    assert task["id"] == "INBOX-042"
+    assert task["id"] == "INBOX-42"
 
 
 def test_translate_issue_title():
