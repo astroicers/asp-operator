@@ -2,7 +2,7 @@ import logging
 import os
 import requests
 import yaml
-from github import Github
+from github import Github, UnknownObjectException
 from typing import List, Dict, Any
 
 from src.config_loader import load_config
@@ -81,6 +81,11 @@ def _get_profile(repo) -> Dict:
     try:
         content = repo.get_contents(".ai_profile")
         return yaml.safe_load(content.decoded_content) or {}
+    except UnknownObjectException:
+        # No .ai_profile -> repo is simply not opt-in. Normal; skip quietly
+        # (most repos under the installation are not governed by ASP).
+        logger.debug(".ai_profile absent for %s; skipping", repo.full_name)
+        return {}
     except Exception as exc:
         logger.warning("Could not load .ai_profile for %s: %s", repo.full_name, type(exc).__name__)
         return {}
