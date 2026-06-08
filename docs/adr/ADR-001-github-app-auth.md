@@ -83,7 +83,8 @@ classic PAT 的問題：
 - [x] 實作 `list_installation_repos`（TDD）+ 改寫 `main()` 列舉。
 - [x] workflow 加 `create-github-app-token` step、env 改取 `steps.app-token.outputs.token`。
 - [ ] **人類專屬**（依 SOP `docs/github-app-setup.md`）：建 App（權限 contents:write + issues:read）、裝 All repositories、設 var/secret。
-- [ ] POC：`workflow_dispatch` 實測 token 簽發 + inbox 寫入正常後，刪舊 PAT secret 並撤銷 PAT。
+- [x] POC：`workflow_dispatch` canary（branch ref）實測 token 簽發 + 列舉 44 repos 正常（2026-06-08，run 27137024508）。
+- [ ] **人類專屬**：merge PR #1 → 確認排程（main）用 App token → 刪舊 `OPERATOR_GITHUB_TOKEN` secret 並撤銷 PAT（階段 7）。
 
 ---
 
@@ -115,7 +116,7 @@ classic PAT 的問題：
 
 | 欄位 | 內容 |
 |------|------|
-| **POC 分支 / 測試結果** | 分支 `asp/github-app-auth`；單元測試全綠（含 `list_installation_repos` 分頁 + authorized_owners 過濾測試） |
-| **驗證日期** | 2026-06-08（單元層）；端到端待人類完成 App 設定後 `workflow_dispatch` |
+| **POC 分支 / 測試結果** | 分支 `asp/github-app-auth`；單元測試 51 passed；**canary `workflow_dispatch` 綠**（App ID `3996872`，run 27137024508 等） |
+| **驗證日期** | 2026-06-08（單元 + 端到端 canary 皆完成） |
 | **驗證者** | astroicers |
-| **驗證摘要** | 程式 / workflow / 文件層遷移完成且單元測試通過；token 簽發與 inbox 寫入之端到端 POC 待人類建立 App 後執行 |
+| **驗證摘要** | App token 成功簽發；`/installation/repositories` 列舉到 44 repos；發現並修復「DMCA 封鎖 repo（VMProtect-Source 451）會中止整個列舉」之 bug（改 per-repo 容錯）；opt-in repo 乾淨處理。production 生效待 merge PR #1，其後執行階段 7（撤 PAT）。 |

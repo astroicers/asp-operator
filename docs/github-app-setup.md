@@ -161,6 +161,8 @@
 | Poll 大量 `404` / `Could not load .ai_profile` warning | 正常（該 repo 無 `.ai_profile` 或非 opt-in，會被跳過） | 無需處理；若**全部** 404 才是安裝/權限問題 |
 | installation repos 回空清單 | App 裝在 0 個 repo、或 `authorized_owners` 與實際 owner 不符 | 確認階段 3 選了 All repositories；確認 `operator-config.yaml` 的 `authorized_owners` 含 `astroicers` |
 | inbox commit 沒出現 | 該 repo `.ai_profile` 無 `operator.enabled: true`，或無 `ready-for-agent` issue | 檢查 `.ai_profile` opt-in 與 issue 標籤 |
+| Poll log 出現 `451 ... "reason": "dmca"` 或單一 repo `GithubException` | 帳號內有被封鎖 / 空 repo（如 DMCA takedown） | **正常** —— 已 per-repo 容錯，該 repo 記 WARNING 後跳過，不影響其他 repo |
+| Poll log 一堆 `.ai_profile absent ... skipping`（debug） | 多數 repo 非 opt-in | **正常** —— 已降為 debug，預設不顯示 |
 
 ---
 
