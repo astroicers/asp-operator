@@ -4,3 +4,9 @@ __pycache__/
 *.egg-info/
 dist/
 .env
+
+# Secrets — never commit. GitHub App private keys live in /home/ubuntu/secrets/
+# (outside any repo). This is defence-in-depth in case a key is ever dropped here.
+*.pem
+*.key
+secrets/

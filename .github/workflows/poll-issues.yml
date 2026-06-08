@@ -5,6 +5,8 @@ on:
     - cron: '*/30 * * * *'
   workflow_dispatch:
 
+# The built-in GITHUB_TOKEN is unused (the operator authenticates via a GitHub
+# App installation token, see ADR-001). Kept minimal.
 permissions:
   contents: read
 
@@ -14,6 +16,18 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+
+      # Mint a short-lived (1h) installation token from the ASP-Operator GitHub
+      # App. Scoped to all repos the App is installed on under `owner`. The
+      # token is fed into the existing OPERATOR_GITHUB_TOKEN interface — only
+      # its source changed (classic PAT -> App token). See ADR-001.
+      - name: Mint GitHub App installation token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ vars.ASP_OPERATOR_APP_ID }}
+          private-key: ${{ secrets.ASP_OPERATOR_APP_PRIVATE_KEY }}
+          owner: astroicers
 
       - uses: actions/setup-python@v5
         with:
@@ -30,5 +44,5 @@ jobs:
       - name: Poll GitHub Issues
         run: python -m src.poll_issues
         env:
-          OPERATOR_GITHUB_TOKEN: ${{ secrets.OPERATOR_GITHUB_TOKEN }}
+          OPERATOR_GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           PYTHONPATH: ${{ github.workspace }}

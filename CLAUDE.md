@@ -18,9 +18,19 @@ ASP-Operator 感知外部世界（GitHub Issues）並轉譯為各被治理專案
 - 語言：Python 3.12
 - 核心模組：`src/config_loader.py`、`src/task_translator.py`、`src/inbox_writer.py`、`src/poll_issues.py`
 
+## 認證（Auth）
+
+憑證走 **GitHub App installation token**，非 classic PAT。
+
+- 決策：`docs/adr/ADR-001-github-app-auth.md`
+- **帳號端設定 SOP（建 App / 裝 App / 設 secret / 切換 / 退役 PAT）：`docs/github-app-setup.md`**
+- workflow 用 `actions/create-github-app-token` 以 `vars.ASP_OPERATOR_APP_ID` + `secrets.ASP_OPERATOR_APP_PRIVATE_KEY` 簽發短效 token，餵進 `OPERATOR_GITHUB_TOKEN`（介面不變）。
+- App 最小權限：`contents: write` + `issues: read`（不碰 PR/admin）；安裝廣度 All repositories。
+- repo 列舉走 `/installation/repositories`（`list_installation_repos`），公私有皆正確。
+
 ## 常用指令
 
 | 動作 | 指令 |
 |------|------|
-| 執行測試 | `python -m pytest tests/ -v` |
-| 手動觸發 poll | `OPERATOR_GITHUB_TOKEN=xxx python src/poll_issues.py` |
+| 執行測試 | `PYTHONPATH=. python -m pytest tests/ -v` |
+| 手動觸發 poll | `OPERATOR_GITHUB_TOKEN=<App installation token> PYTHONPATH=. python -m src.poll_issues` |

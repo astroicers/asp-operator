@@ -24,10 +24,10 @@ tasks:
     title: "poll_issues: 整合三模組 + GitHub Actions workflow"
     type: NEW_FEATURE
     priority: high
-    status: pending
+    status: completed
 
   - id: TASK-005
     title: "驗收: workflow_dispatch 測試 + AI-SOP-Protocol opt-in"
     type: NEW_FEATURE
     priority: high
-    status: pending
+    status: completed

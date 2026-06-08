@@ -3,6 +3,8 @@ version: "1.0"
 authorized_owners:
   - "astroicers"
 
+# Token 介面（值由 GitHub App installation token 填入；非 classic PAT）。
+# 設定見 docs/github-app-setup.md，決策見 docs/adr/ADR-001-github-app-auth.md
 github_token_env: "OPERATOR_GITHUB_TOKEN"
 
 defaults:
