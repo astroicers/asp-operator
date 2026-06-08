@@ -1,6 +1,11 @@
 import pytest
 from unittest.mock import MagicMock, patch, call
-from src.poll_issues import poll_repo, filter_issues, build_github_client
+from src.poll_issues import (
+    poll_repo,
+    filter_issues,
+    build_github_client,
+    list_installation_repos,
+)
 
 
 LABEL_FILTER = ["ready-for-agent"]
@@ -137,3 +142,66 @@ def test_poll_repo_uses_profile_label_filter_override():
         }
         poll_repo(repo, ".asp-task-inbox.json", LABEL_FILTER, PRIORITY_MAP, SLA_MAP)
         mock_write.assert_called_once()
+
+
+# ── list_installation_repos ───────────────────────────────────────────────────
+
+def _page(repos):
+    resp = MagicMock()
+    resp.raise_for_status.return_value = None
+    resp.json.return_value = {"repositories": repos}
+    return resp
+
+
+def _repo_entry(full_name):
+    owner = full_name.split("/")[0]
+    return {"full_name": full_name, "owner": {"login": owner}}
+
+
+def test_list_installation_repos_returns_repo_objects_for_accessible():
+    gh = MagicMock()
+    gh.get_repo.side_effect = lambda name: f"repo:{name}"
+    resp = _page([_repo_entry("astroicers/a"), _repo_entry("astroicers/b")])
+
+    with patch("src.poll_issues.requests.get", return_value=resp) as mock_get:
+        result = list_installation_repos(gh, "tok", ["astroicers"])
+
+    assert result == ["repo:astroicers/a", "repo:astroicers/b"]
+    # token is carried as a Bearer credential
+    _, kwargs = mock_get.call_args
+    assert kwargs["headers"]["Authorization"] == "Bearer tok"
+
+
+def test_list_installation_repos_filters_unauthorized_owner():
+    gh = MagicMock()
+    gh.get_repo.side_effect = lambda name: name
+    resp = _page([_repo_entry("astroicers/a"), _repo_entry("intruder/x")])
+
+    with patch("src.poll_issues.requests.get", return_value=resp):
+        result = list_installation_repos(gh, "tok", ["astroicers"])
+
+    assert result == ["astroicers/a"]
+
+
+def test_list_installation_repos_paginates():
+    gh = MagicMock()
+    gh.get_repo.side_effect = lambda name: name
+    page1 = _page([_repo_entry("astroicers/a"), _repo_entry("astroicers/b")])
+    page2 = _page([_repo_entry("astroicers/c")])
+
+    with patch("src.poll_issues.requests.get", side_effect=[page1, page2]) as mock_get:
+        result = list_installation_repos(gh, "tok", ["astroicers"], per_page=2)
+
+    assert result == ["astroicers/a", "astroicers/b", "astroicers/c"]
+    assert mock_get.call_count == 2
+
+
+def test_list_installation_repos_empty_does_not_call_get_repo():
+    gh = MagicMock()
+    resp = _page([])
+
+    with patch("src.poll_issues.requests.get", return_value=resp):
+        result = list_installation_repos(gh, "tok", ["astroicers"])
+
+    assert result == []
+    gh.get_repo.assert_not_called()
