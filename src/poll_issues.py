@@ -36,6 +36,7 @@ def list_installation_repos(gh, token: str, authorized_owners: List[str], per_pa
         "X-GitHub-Api-Version": "2022-11-28",
     }
     full_names: List[str] = []
+    total = 0
     page = 1
     while True:
         resp = requests.get(
@@ -46,13 +47,25 @@ def list_installation_repos(gh, token: str, authorized_owners: List[str], per_pa
         )
         resp.raise_for_status()
         batch = resp.json().get("repositories", [])
+        total += len(batch)
         for r in batch:
             if r["owner"]["login"] in authorized_owners:
                 full_names.append(r["full_name"])
         if len(batch) < per_page:
             break
         page += 1
-    return [gh.get_repo(name) for name in full_names]
+
+    logger.info(
+        "installation grants %d repo(s); %d under authorized_owners=%s",
+        total, len(full_names), authorized_owners,
+    )
+    repos = []
+    for name in full_names:
+        try:
+            repos.append(gh.get_repo(name))
+        except Exception as exc:
+            logger.warning("get_repo(%s) failed: %s", name, exc)
+    return repos
 
 
 def filter_issues(issues: list, label_filter: List[str]) -> list:
@@ -131,7 +144,7 @@ def main():
     try:
         repos = list_installation_repos(gh, token, config.authorized_owners)
     except Exception as exc:
-        logger.error("Cannot list installation repositories: %s", type(exc).__name__)
+        logger.error("Cannot list installation repositories: %s", exc)
         return
 
     for repo in repos:
