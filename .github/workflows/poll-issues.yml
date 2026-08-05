@@ -1,8 +1,10 @@
 name: ASP Operator — Poll Issues
 
 on:
-  schedule:
-    - cron: '*/30 * * * *'
+  # ⏸️ FROZEN (AI-SOP-Protocol ADR-032, 2026-08-05)：排程輪詢已停用，operator 感知層凍結。
+  # 解凍：取消下列 schedule 註解即可（workflow_dispatch 保留供手動測試/解凍驗證）。
+  # schedule:
+  #   - cron: '*/30 * * * *'
   workflow_dispatch:
 
 # The built-in GITHUB_TOKEN is unused (the operator authenticates via a GitHub
