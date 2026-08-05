@@ -1,15 +1,17 @@
-<!-- Last Updated: 2026-06-11 | Status: Draft | Audience: asp-operator maintainers -->
+<!-- Last Updated: 2026-08-05 | Status: Superseded | Audience: asp-operator maintainers -->
 # [ADR-002]: 依架構影響分類產出 — 架構級 issue 改吐 Draft ADR PR，並擷取 issue author
 
 | 欄位 | 內容 |
 |------|------|
-| **狀態** | `Draft` |
+| **狀態** | `Superseded` |
 | **日期** | 2026-06-11 |
 | **決策者** | astroicers（待人類審核） |
 | **觸發事件** | AI-SOP-Protocol [ADR-012](https://github.com/astroicers/AI-SOP-Protocol/blob/main/docs/adr/ADR-012-define-operator-autopilot-interaction-trust-model.md)（Accepted 2026-06-11）DP5 要求 operator 重定位；一致性審計揭露 C1（asp-op 與 autopilot ADR 閘從未對齊）與 C3（直推 main 無證成 + 丟失 issue author） |
 | **關聯** | ADR-012 DP1/DP2/DP5；AI-SOP-Protocol SPEC-007（inbox held）/ SPEC-008（provenance 閘）/ SPEC-009（triage 通道）；`src/task_translator.py`；`src/inbox_writer.py`；`src/poll_issues.py` |
 
 > **狀態說明：** `Draft`（初稿，禁止實作）→ `FIRM`（POC 驗證，允許 commit，需附驗證證據）→ `Accepted`（人類審核通過）
+>
+> ⏹️ **SUPERSEDED（AI-SOP-Protocol ADR-032，2026-08-05）：** operator 感知層停用並凍結，本 DP5 pivot 不再實作。保留為凍結歷史；解凍時可重啟本 pivot 評估。
 
 ---
 

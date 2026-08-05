@@ -2,6 +2,11 @@
 
 > ASP 框架的**外部感知層**：每 30 分鐘輪詢 GitHub Issues，轉譯為各被治理專案的 `.asp-task-inbox.json`。
 
+> ## ⏸️ FROZEN（AI-SOP-Protocol ADR-032，2026-08-05）
+> asp-operator 感知層已**停用並凍結**：排程輪詢停止、GitHub App 卸載、私鑰封存、repo 即將 archive。
+> 停凍原因：零實現價值（不用／會忘）+ 休眠 T-14 攻擊面。**可逆解凍** — 見 [AI-SOP-Protocol ADR-032](https://github.com/astroicers/AI-SOP-Protocol/blob/main/docs/adr/ADR-032-decommission-and-freeze-asp-operator-perception-pillar.md)。
+> 蒸餾去向：inbox schema／GitHub App 最小權限樣式／生產者↔閘一致性教訓已蒸餾入 AI-SOP-Protocol（ADR-032 Locus D）。
+
 [![Auth: GitHub App](https://img.shields.io/badge/auth-GitHub%20App-blue)](docs/github-app-setup.md)
 [![Permissions: least-privilege](https://img.shields.io/badge/permissions-contents%3Awrite%20%2B%20issues%3Aread-green)](docs/adr/ADR-001-github-app-auth.md)
 
